@@ -20,6 +20,11 @@ app.add_middleware(
 with open("__model__/model.pkl", "rb") as rf:
     model = pickle.load(rf)
 
+@app.get('/')
+async def welcome():
+    return { 'message': 'Welcome to this API!'}
+
+    
 @app.get('/{page}')
 async def get_data(page: int):
     no_of_records_per_page = 10

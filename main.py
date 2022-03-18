@@ -17,8 +17,10 @@ app.add_middleware(
     allow_headers=["*"]
 )
 
-with open("__model__/model.pkl", "rb") as rf:
-    model = pickle.load(rf)
+# with open("__model__/model.pkl", "rb") as rf:
+#     model = pickle.load(rf)
+model = pickle.load(open('model.pkl', 'rb'))
+
 
 @app.get('/{page}')
 async def get_data(page: int):

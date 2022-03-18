@@ -20,11 +20,6 @@ app.add_middleware(
 with open("__model__/model.pkl", "rb") as rf:
     model = pickle.load(rf)
 
-@app.get('/')
-async def welcome():
-    return { 'message': 'Welcome to this API!'}
-
-
 @app.get('/{page}')
 async def get_data(page: int):
     no_of_records_per_page = 10
@@ -95,10 +90,6 @@ async def predict_sales(data: ItemDetails):
         'status': 200, 
         'predicted_sales': predicted_sales[0] 
     }
-
-
-# if __name__ == '__main__':
-#     uvicorn.run(app, host='127.0.0.1', port=8000)
 
 
 

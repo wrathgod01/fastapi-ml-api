@@ -27,6 +27,10 @@ model = joblib.load('model_joblib.pkl.z')
 def entry_point():
     return { 'message': 'Welcome to Sales Forecasting API !!!' }
 
+@app.get('/favicon.ico')
+def ico():
+    return None
+
 @app.get('/{page}')
 async def get_data(page: int):
     no_of_records_per_page = 10

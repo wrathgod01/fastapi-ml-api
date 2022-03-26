@@ -1,5 +1,6 @@
 import uvicorn
 import pickle
+import joblib
 import numpy as np
 import pandas as pd
 from fastapi import FastAPI
@@ -19,8 +20,12 @@ app.add_middleware(
 
 # with open("__model__/model.pkl", "rb") as rf:
 #     model = pickle.load(rf)
-model = pickle.load(open('model.pkl', 'rb'))
+# model = pickle.load(open('model.pkl', 'rb'))
+model = joblib.load('model_joblib.pkl.z')
 
+@app.get('/')
+def entry_point():
+    return { 'message': 'Welcome to Sales Forecasting API !!!' }
 
 @app.get('/{page}')
 async def get_data(page: int):

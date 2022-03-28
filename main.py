@@ -27,12 +27,9 @@ model = joblib.load('model_joblib.pkl.z')
 def entry_point():
     return { 'message': 'Welcome to Sales Forecasting API !!!' }
 
-@app.get('/favicon.ico')
-def ico():
-    return None
 
 @app.get('/{page}')
-async def get_data(page: int):
+async def get_paginated_data(page: int):
     no_of_records_per_page = 10
     start = (no_of_records_per_page * (page-1))
     end = (page * no_of_records_per_page) 
@@ -49,7 +46,7 @@ async def get_data(page: int):
 
 
 @app.get('/params/{param}')
-async def get_result_list(param: str):
+async def get_attribute_value_list(param: str):
     df = pd.read_csv('datasets/train.csv')
     attr = ''
     

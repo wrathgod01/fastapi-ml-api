@@ -18,68 +18,26 @@ app.add_middleware(
     allow_headers=["*"]
 )
 
-# with open("__model__/model.pkl", "rb") as rf:
-#     model = pickle.load(rf)
-# model = pickle.load(open('model.pkl', 'rb'))
-model = joblib.load('model_joblib.pkl.z')
+model = joblib.load('model_joblib_rf.pkl.z')
 
 @app.get('/')
 def entry_point():
     return { 'message': 'Welcome to Sales Forecasting API !!!' }
 
-
-@app.get('/{page}')
-async def get_paginated_data(page: int):
-    no_of_records_per_page = 10
-    start = (no_of_records_per_page * (page-1))
-    end = (page * no_of_records_per_page) 
-
-    df = pd.read_csv('datasets/train.csv')
-    data = df.iloc[start:end].to_json(orient ='records')
-
-    return { 
-        'status': 200,
-        'data': data 
-    }
-
-
-
-
 @app.get('/params/{param}')
-async def get_attribute_value_list(param: str):
-    df = pd.read_csv('datasets/train.csv')
-    attr = ''
-    
-    if(param == 'item_identifier'): 
-        attr = 'Item_Identifier'
-    elif(param == 'item_fat_content'):
-        attr = 'Item_Fat_Content'
-    elif(param == 'item_type'):
-        attr = 'Item_Type'
-    elif(param == 'outlet_identifier'):
-        attr = 'Outlet_Identifier'
-    elif(param == 'outlet_size'):
-        attr = 'Outlet_Size'
-    elif(param == 'outlet_location_type'):
-        attr = 'Outlet_Location_Type'
-    elif(param == 'outlet_type'):
-        attr = 'Outlet_Type'
-    else:
+async def get_values_of_attributes(param: str):
+    df = pd.read_json('datasets/data.json')
+    if param not in ['item_identifier', 'item_fat_content', 'item_type', 'outlet_identifier', 'outlet_size', 'outlet_establishment_year', 'outlet_location_type', 'outlet_type']:
         return { 
             'status': 404,
             'result': 'No such attribute exists' 
         }
 
-
-    final_list = df[attr].unique().tolist()
+    final_list = df['train'][param]
     
-    if(attr == 'Item_Fat_Content'):
-        final_list = [e for e in final_list if e != 'LF' and e != 'reg' and e != 'low fat']
-    elif(attr == 'Outlet_Size'):
-        final_list = [e for e in final_list if str(e) != 'nan']  # To check if it is nan/NAN, it can't be equal to itself
-
     return { 
         'status': 200,
+        'length': final_list.strip('][').split(', ').__len__(),
         'result': final_list 
     }
 
@@ -96,7 +54,7 @@ async def predict_sales(data: ItemDetails):
     
     return {
         'status': 200, 
-        'predicted_sales': predicted_sales[0] 
+        'predicted_sales': predicted_sales[0]
     }
 
 

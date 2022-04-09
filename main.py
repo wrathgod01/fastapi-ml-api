@@ -54,7 +54,3 @@ async def predict_sales(data: ItemDetails):
         'status': 200, 
         'predicted_sales': predicted_sales[0]
     }
-
-
-
-# python -m uvicorn main:app --reload

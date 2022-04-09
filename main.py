@@ -10,7 +10,7 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["https://wrathgod01.github.io/sales-prediction-frontend/", "localhost:5500/index.html"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"]

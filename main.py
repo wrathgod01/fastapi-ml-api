@@ -24,7 +24,7 @@ def entry_point():
 @app.get('/params/{param}')
 async def get_values_of_attributes(param: str):
     df = pd.read_json('datasets/data.json')
-    if param not in ['item_identifier', 'item_fat_content', 'item_type', 'outlet_identifier', 'outlet_size', 'outlet_establishment_year', 'outlet_location_type', 'outlet_type']:
+    if param not in ['item_identifier', 'item_fat_content', 'item_type', 'outlet_identifier', 'outlet_size', 'outlet_location_type', 'outlet_type']:
         return { 
             'status': 404,
             'result': 'No such attribute exists' 

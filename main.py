@@ -1,12 +1,10 @@
-import uvicorn
-import pickle
-import joblib
 import numpy as np
 import pandas as pd
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from assets.item_model import ItemDetails
 from assets.transform import transform_data
+from assets.load_model import load_model_from_deta_drive
 
 app = FastAPI()
 
@@ -18,7 +16,6 @@ app.add_middleware(
     allow_headers=["*"]
 )
 
-model = joblib.load('model_joblib_rf.pkl.z')
 
 @app.get('/')
 def entry_point():
@@ -50,13 +47,10 @@ async def predict_sales(data: ItemDetails):
     
     transformed_data = np.array(transform_data(data))
     
+    model = load_model_from_deta_drive()
     predicted_sales = model.predict(transformed_data)    
     
     return {
         'status': 200, 
         'predicted_sales': predicted_sales[0]
     }
-
-
-
-# python -m uvicorn main:app --reload
